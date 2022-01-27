@@ -33,20 +33,69 @@ Route::get('/resultados', function () {
         'gender_f' => function() {
             return Entry::where('gender', 'F')->count();
         },
-        'genders' => function() {
-            return collect(Answer::with('question')->cursor()
-            ->where('question_id', 1))->groupBy(function($item) {
-                return $item->value;
-            })->map(function($item) {
-                return [
-                    'gender' => $item[0]->value,
-                    'total' => $item->count()
-                ];
-            })->sortByDesc('total')->values()->take(2);
-        },
-        'subjects' => function() {
+        'no_delays' => function() {
             return collect(Answer::with('question', 'class', 'subject')->cursor()
             ->where('question_id', 3))->groupBy(function($item) {
+              return $item->value;
+          })->map(function($item) {
+              return [
+                  'id' => $item->first()->subject->id,
+                  'subject' => $item->first()->subject->name,
+                'total' => $item->count()
+              ];
+          })->sortByDesc('total')->values()->take(8);
+        },
+        'few_delays' => function() {
+            return collect(Answer::with('question', 'class', 'subject')->cursor()
+            ->where('question_id', 4))->groupBy(function($item) {
+              return $item->value;
+          })->map(function($item) {
+              return [
+                  'id' => $item->first()->subject->id,
+                  'subject' => $item->first()->subject->name,
+                'total' => $item->count()
+              ];
+          })->sortByDesc('total')->values()->take(8);
+        },
+        'lots_of_delays' => function() {
+            return collect(Answer::with('question', 'class', 'subject')->cursor()
+            ->where('question_id', 5))->groupBy(function($item) {
+              return $item->value;
+          })->map(function($item) {
+              return [
+                  'id' => $item->first()->subject->id,
+                  'subject' => $item->first()->subject->name,
+                'total' => $item->count()
+              ];
+          })->sortByDesc('total')->values()->take(8);
+        },
+        'no_absences' => function() {
+            return collect(Answer::with('question', 'class', 'subject')->cursor()
+            ->where('question_id', 6))->groupBy(function($item) {
+              return $item->value;
+          })->map(function($item) {
+              return [
+                  'id' => $item->first()->subject->id,
+                  'subject' => $item->first()->subject->name,
+                'total' => $item->count()
+              ];
+          })->sortByDesc('total')->values()->take(8);
+        },
+        'few_absences' => function() {
+            return collect(Answer::with('question', 'class', 'subject')->cursor()
+            ->where('question_id', 7))->groupBy(function($item) {
+              return $item->value;
+          })->map(function($item) {
+              return [
+                  'id' => $item->first()->subject->id,
+                  'subject' => $item->first()->subject->name,
+                'total' => $item->count()
+              ];
+          })->sortByDesc('total')->values()->take(8);
+        },
+        'lots_of_absences' => function() {
+            return collect(Answer::with('question', 'class', 'subject')->cursor()
+            ->where('question_id', 8))->groupBy(function($item) {
               return $item->value;
           })->map(function($item) {
               return [
@@ -87,8 +136,22 @@ Route::post('/surveys', function () {
     request()->validate([
         'class' => ['required', 'exists:classes,id'],
         'gender' => ['required'],
-        'subjects' => 'required|array|min:1|max:8',
-    ],[], ['subjects' => 'Unidade Curricular', 'class' => 'Turma', 'gender' => 'Gênero']);
+        'no_delays' => 'required|array|min:1|max:8',
+        'few_delays' => 'required|array|min:1|max:8',
+        'lots_of_delays' => 'required|array|min:1|max:8',
+        'no_absences' => 'required|array|min:1|max:8',
+        'few_absences' => 'required|array|min:1|max:8',
+        'lots_of_absences' => 'required|array|min:1|max:8',
+    ],[], [
+        'class' => 'Turma',
+        'gender' => 'Gênero',
+        'no_delays' => 'Sem atrasos',
+        'few_delays' => 'Poucos atrasos',
+        'lots_of_delays' => 'Muitos atrasos',
+        'no_absences' => 'Sem faltas',
+        'few_absences' => 'Poucas faltas',
+        'lots_of_absences' => 'Muitas faltas',
+    ]);
 
     // Create Entry
     $participant = Entry::create([
@@ -116,19 +179,103 @@ Route::post('/surveys', function () {
         'value' => request()->class,
     ]);
 
-    // Subjects Answer
+    // Punctuality Answer - No delays 
 
-    $subs = Subject::whereIn('id', request()->subjects)->get();
-
-    foreach($subs as $sub) {
+    if(count(request()->no_delays) > 0) {
         
-        Answer::create([
-            'survey_id' => 1,
-            'entry_id' => $participant->id,
-            'question_id' => 3,
-            'gender' => null,
-            'value' => $sub->id,
-        ]);
+        $subs = Subject::whereIn('id', request()->no_delays)->get();
+
+        foreach($subs as $sub) {
+        
+            Answer::create([
+                'survey_id' => 1,
+                'entry_id' => $participant->id,
+                'question_id' => 3,
+                'gender' => request()->gender,
+                'value' => $sub->id,
+            ]);
+        }
+    }
+
+    if(count(request()->few_delays) > 0) {
+        
+        $subs = Subject::whereIn('id', request()->few_delays)->get();
+
+        foreach($subs as $sub) {
+        
+            Answer::create([
+                'survey_id' => 1,
+                'entry_id' => $participant->id,
+                'question_id' => 4,
+                'gender' => request()->gender,
+                'value' => $sub->id,
+            ]);
+        }
+    }
+
+    if(count(request()->lots_of_delays) > 0) {
+        
+        $subs = Subject::whereIn('id', request()->lots_of_delays)->get();
+
+        foreach($subs as $sub) {
+        
+            Answer::create([
+                'survey_id' => 1,
+                'entry_id' => $participant->id,
+                'question_id' => 5,
+                'gender' => request()->gender,
+                'value' => $sub->id,
+            ]);
+        }
+    }
+
+    // Absences Answer - No absences
+    if(count(request()->no_absences) > 0) {
+        
+        $subs = Subject::whereIn('id', request()->no_absences)->get();
+
+        foreach($subs as $sub) {
+        
+            Answer::create([
+                'survey_id' => 1,
+                'entry_id' => $participant->id,
+                'question_id' => 6,
+                'gender' => request()->gender,
+                'value' => $sub->id,
+            ]);
+        }
+    }
+
+    if(count(request()->few_absences) > 0) {
+        
+        $subs = Subject::whereIn('id', request()->few_absences)->get();
+
+        foreach($subs as $sub) {
+        
+            Answer::create([
+                'survey_id' => 1,
+                'entry_id' => $participant->id,
+                'question_id' => 7,
+                'gender' => request()->gender,
+                'value' => $sub->id,
+            ]);
+        }
+    }
+
+    if(count(request()->lots_of_absences) > 0) {
+        
+        $subs = Subject::whereIn('id', request()->lots_of_absences)->get();
+
+        foreach($subs as $sub) {
+        
+            Answer::create([
+                'survey_id' => 1,
+                'entry_id' => $participant->id,
+                'question_id' => 8,
+                'gender' => request()->gender,
+                'value' => $sub->id,
+            ]);
+        }
     }
 
     return redirect('/')->with('toast', [

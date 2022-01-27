@@ -8,7 +8,7 @@
         </div>
         <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
           <div class="flex-shrink-0 flex items-center">
-            <logo class="fill-white block h-8" width="320" height="72" />
+            <!-- <logo class="fill-white block h-8" width="320" height="72" /> -->
 
             <!-- <img class="block lg:hidden h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-yellow-400.svg" alt="Workflow" />
             <img class="hidden lg:block h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-yellow-400-mark-white-text.svg" alt="Workflow" /> -->
@@ -80,7 +80,7 @@
             id="class"  
             :searchable="true"
             :filterResults="true"
-            placeholder="Seleccionar turma"
+            placeholder="Seleccione a sua turma"
             :minChars="1"
             :resolveOnLoad="true"
             :delay="0"
@@ -99,11 +99,11 @@
   <div class="bg-white shadow sm:rounded-lg ml-4 mr-4 mt-4">
     <div class="px-4 py-5 sm:p-6">
       <h3 class="text-lg leading-6 font-medium text-gray-900">
-        Unidade Curricular
+        PONTUALIDADE
       </h3>
-      <div class="mt-2 max-w-xl text-sm text-gray-500">
+      <div class="mt-2 max-w-xl text-lg text-gray-500">
         <p>
-          Entre as unidades curriculares inscritas no presente semestre, indique aquelas que têm-se registado atrasos e/ou ausência repetitiva do Professor em sala de aula. (Pode seleccionar até 8 disciplinas).
+          Indique as disciplinas em que o respectivo docente <b>não tem registado atrasos </b> às aulas.
         </p>
         
       </div>
@@ -111,7 +111,7 @@
           <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <li v-for="item in subjects" :key="item.id" class="col-span-1 flex shadow-sm rounded-md bg-gray-100">
                 <div class="flex-shrink-0 flex items-center justify-center w-16 text-gray-800 text-sm font-medium rounded-l-md">
-                <input :id="item.id" :name="item.name" v-model="form.subjects" type="checkbox" :value="item.id" class="h-4 w-4 text-yellow-400 focus:ring-yellow-400 rounded-full" />
+                <input :id="item.id" :name="item.name" v-model="form.no_delays" type="checkbox" :value="item.id" class="h-4 w-4 text-green-500 focus:ring-green-500 rounded-full" />
                 </div>
                 <div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
                      
@@ -124,8 +124,157 @@
             </li>
             </ul>
             <br>
-            <p v-if="form.errors.subjects" class="mt-2 text-sm text-red-600" id="subjects-error">{{ form.errors.subjects }}</p>
+            <p v-if="form.errors.no_delays" class="mt-2 text-sm text-red-600" id="no_delays-error">{{ form.errors.no_delays }}</p>
       </div>
+      <hr>
+
+      <div class="mt-2 max-w-xl text-lg text-gray-500">
+        <p>
+          Indique as disciplinas em que o respectivo docente <b>tem registado poucos atrasos </b> às aulas.
+        </p>
+        
+      </div>
+      <div class="mt-3 text-sm">
+          <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <li v-for="item in subjects" :key="item.id" class="col-span-1 flex shadow-sm rounded-md bg-gray-100">
+                <div class="flex-shrink-0 flex items-center justify-center w-16 text-gray-800 text-sm font-medium rounded-l-md">
+                <input :id="item.id" :name="item.name" v-model="form.few_delays" type="checkbox" :value="item.id" class="h-4 w-4 text-orange-400 focus:ring-orange-400 rounded-full" />
+                </div>
+                <div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+                     
+                <div class="flex-1 px-4 py-2 text-sm truncate">
+                    
+                    <p class="text-gray-500">{{ item.name }}</p>
+                </div>
+                
+                </div>
+            </li>
+            </ul>
+            <br>
+            <p v-if="form.errors.few_delays" class="mt-2 text-sm text-red-600" id="few_delays-error">{{ form.errors.few_delays }}</p>
+      </div>
+
+      <hr>
+
+      <div class="mt-2 max-w-xl text-lg text-gray-500">
+        <p>
+          Indique as disciplinas em que o respectivo docente <b>tem registado muitos atrasos </b> às aulas.
+        </p>
+        
+      </div>
+      <div class="mt-3 text-sm">
+          <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <li v-for="item in subjects" :key="item.id" class="col-span-1 flex shadow-sm rounded-md bg-gray-100">
+                <div class="flex-shrink-0 flex items-center justify-center w-16 text-gray-800 text-sm font-medium rounded-l-md">
+                <input :id="item.id" :name="item.name" v-model="form.lots_of_delays" type="checkbox" :value="item.id" class="h-4 w-4 text-red-500 focus:ring-red-500 rounded-full" />
+                </div>
+                <div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+                     
+                <div class="flex-1 px-4 py-2 text-sm truncate">
+                    
+                    <p class="text-gray-500">{{ item.name }}</p>
+                </div>
+                
+                </div>
+            </li>
+            </ul>
+            <br>
+            <p v-if="form.errors.lots_of_delays" class="mt-2 text-sm text-red-600" id="lots_of_delays-error">{{ form.errors.lots_of_delays }}</p>
+      </div>
+
+      <hr>
+      <div class="flex justify-end mt-4">
+        
+        </div>
+    </div>
+  </div>
+
+  <div class="bg-white shadow sm:rounded-lg ml-4 mr-4 mt-4">
+    <div class="px-4 py-5 sm:p-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+        ASSIDUIDADE
+      </h3>
+      <div class="mt-2 max-w-xl text-lg text-gray-500">
+        <p>
+          Indique as disciplinas em que o respectivo docente <b>não tem registado faltas </b> às aulas.
+        </p>
+        
+      </div>
+      <div class="mt-3 text-sm">
+          <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <li v-for="item in subjects" :key="item.id" class="col-span-1 flex shadow-sm rounded-md bg-gray-100">
+                <div class="flex-shrink-0 flex items-center justify-center w-16 text-gray-800 text-sm font-medium rounded-l-md">
+                <input :id="item.id" :name="item.name" v-model="form.no_absences" type="checkbox" :value="item.id" class="h-4 w-4 text-green-500 focus:ring-green-500 rounded-full" />
+                </div>
+                <div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+                     
+                <div class="flex-1 px-4 py-2 text-sm truncate">
+                    
+                    <p class="text-gray-500">{{ item.name }}</p>
+                </div>
+                
+                </div>
+            </li>
+            </ul>
+            <br>
+            <p v-if="form.errors.no_absences" class="mt-2 text-sm text-red-600" id="no_absences-error">{{ form.errors.no_absences }}</p>
+      </div>
+      <hr>
+
+      <div class="mt-2 max-w-xl text-lg text-gray-500">
+        <p>
+          Indique as disciplinas em que o respectivo docente <b>tem registado poucas faltas </b> às aulas.
+        </p>
+        
+      </div>
+      <div class="mt-3 text-sm">
+          <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <li v-for="item in subjects" :key="item.id" class="col-span-1 flex shadow-sm rounded-md bg-gray-100">
+                <div class="flex-shrink-0 flex items-center justify-center w-16 text-gray-800 text-sm font-medium rounded-l-md">
+                <input :id="item.id" :name="item.name" v-model="form.few_absences" type="checkbox" :value="item.id" class="h-4 w-4 text-orange-400 focus:ring-orange-400 rounded-full" />
+                </div>
+                <div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+                     
+                <div class="flex-1 px-4 py-2 text-sm truncate">
+                    
+                    <p class="text-gray-500">{{ item.name }}</p>
+                </div>
+                
+                </div>
+            </li>
+            </ul>
+            <br>
+            <p v-if="form.errors.few_absences" class="mt-2 text-sm text-red-600" id="few_absences-error">{{ form.errors.few_absences }}</p>
+      </div>
+
+      <hr>
+
+      <div class="mt-2 max-w-xl text-lg text-gray-500">
+        <p>
+          Indique as disciplinas em que o respectivo docente <b>tem registado muitos atrasos </b> às aulas.
+        </p>
+        
+      </div>
+      <div class="mt-3 text-sm">
+          <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <li v-for="item in subjects" :key="item.id" class="col-span-1 flex shadow-sm rounded-md bg-gray-100">
+                <div class="flex-shrink-0 flex items-center justify-center w-16 text-gray-800 text-sm font-medium rounded-l-md">
+                <input :id="item.id" :name="item.name" v-model="form.lots_of_absences" type="checkbox" :value="item.id" class="h-4 w-4 text-red-500 focus:ring-red-500 rounded-full" />
+                </div>
+                <div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
+                     
+                <div class="flex-1 px-4 py-2 text-sm truncate">
+                    
+                    <p class="text-gray-500">{{ item.name }}</p>
+                </div>
+                
+                </div>
+            </li>
+            </ul>
+            <br>
+            <p v-if="form.errors.lots_of_absences" class="mt-2 text-sm text-red-600" id="lots_of_absences-error">{{ form.errors.lots_of_absences }}</p>
+      </div>
+
       <hr>
       <div class="flex justify-end mt-4">
         <button :disabled="form.processing" type="button" class="flex items-end px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-gray-900 bg-yellow-400 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400" @click="submit">
@@ -165,11 +314,6 @@ const genderOptions = ref([
     value: 'F',
     label: 'Feminino',
     description: null
-  },
-  {
-    value: 'O',
-    label: 'Outro',
-    description: null
   }
 ]);
 
@@ -177,6 +321,12 @@ let form = useForm({
     gender: 'M',
     class: null,
     subjects: [],
+    no_delays: [],
+    few_delays: [],
+    lots_of_delays: [],
+    no_absences: [],
+    few_absences: [],
+    lots_of_absences: [],
 })
 
 let submit = () => {
