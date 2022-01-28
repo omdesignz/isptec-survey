@@ -6,6 +6,7 @@ use App\Models\Subject;
 use App\Models\Answer;
 use App\Models\Entry;
 use App\Models\Survey;
+use App\Jobs\ProcessAnswers;
 
 /*
 |--------------------------------------------------------------------------
@@ -153,130 +154,9 @@ Route::post('/surveys', function () {
         'lots_of_absences' => 'Muitas faltas',
     ]);
 
-    // Create Entry
-    $participant = Entry::create([
-        'survey_id' => 1,
-        'participant_id' => null,
-        'gender' => request()->gender,
-    ]);
+    // To prevent concurrency issues, all submissions will go to a queue and get processed accordingly
 
-    // Gender Answer
-
-    $gAnswers = Answer::create([
-        'survey_id' => 1,
-        'entry_id' => $participant->id,
-        'question_id' => 1,
-        'gender' => null,
-        'value' => request()->gender,
-    ]);
-
-    // Class Answer
-    $cAnswers = Answer::create([
-        'survey_id' => 1,
-        'entry_id' => $participant->id,
-        'question_id' => 2,
-        'gender' => null,
-        'value' => request()->class,
-    ]);
-
-    // Punctuality Answer - No delays 
-
-    if(count(request()->no_delays) > 0) {
-        
-        $subs = Subject::whereIn('id', request()->no_delays)->get();
-
-        foreach($subs as $sub) {
-        
-            Answer::create([
-                'survey_id' => 1,
-                'entry_id' => $participant->id,
-                'question_id' => 3,
-                'gender' => request()->gender,
-                'value' => $sub->id,
-            ]);
-        }
-    }
-
-    if(count(request()->few_delays) > 0) {
-        
-        $subs = Subject::whereIn('id', request()->few_delays)->get();
-
-        foreach($subs as $sub) {
-        
-            Answer::create([
-                'survey_id' => 1,
-                'entry_id' => $participant->id,
-                'question_id' => 4,
-                'gender' => request()->gender,
-                'value' => $sub->id,
-            ]);
-        }
-    }
-
-    if(count(request()->lots_of_delays) > 0) {
-        
-        $subs = Subject::whereIn('id', request()->lots_of_delays)->get();
-
-        foreach($subs as $sub) {
-        
-            Answer::create([
-                'survey_id' => 1,
-                'entry_id' => $participant->id,
-                'question_id' => 5,
-                'gender' => request()->gender,
-                'value' => $sub->id,
-            ]);
-        }
-    }
-
-    // Absences Answer - No absences
-    if(count(request()->no_absences) > 0) {
-        
-        $subs = Subject::whereIn('id', request()->no_absences)->get();
-
-        foreach($subs as $sub) {
-        
-            Answer::create([
-                'survey_id' => 1,
-                'entry_id' => $participant->id,
-                'question_id' => 6,
-                'gender' => request()->gender,
-                'value' => $sub->id,
-            ]);
-        }
-    }
-
-    if(count(request()->few_absences) > 0) {
-        
-        $subs = Subject::whereIn('id', request()->few_absences)->get();
-
-        foreach($subs as $sub) {
-        
-            Answer::create([
-                'survey_id' => 1,
-                'entry_id' => $participant->id,
-                'question_id' => 7,
-                'gender' => request()->gender,
-                'value' => $sub->id,
-            ]);
-        }
-    }
-
-    if(count(request()->lots_of_absences) > 0) {
-        
-        $subs = Subject::whereIn('id', request()->lots_of_absences)->get();
-
-        foreach($subs as $sub) {
-        
-            Answer::create([
-                'survey_id' => 1,
-                'entry_id' => $participant->id,
-                'question_id' => 8,
-                'gender' => request()->gender,
-                'value' => $sub->id,
-            ]);
-        }
-    }
+    dispatch(new ProcessAnswers(request()->all()))->onQueue('default');
 
     return redirect('/')->with('toast', [
         'message' => 'Obrigado por ter submetido a sua resposta'
