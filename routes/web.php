@@ -7,6 +7,7 @@ use App\Models\Answer;
 use App\Models\Entry;
 use App\Models\Survey;
 use App\Jobs\ProcessAnswers;
+use Illuminate\Support\Facades\RateLimiter;
 
 /*
 |--------------------------------------------------------------------------
@@ -161,4 +162,4 @@ Route::post('/surveys', function () {
     return redirect('/')->with('toast', [
         'message' => 'Obrigado por ter submetido a sua resposta'
     ]);
-});
+})->middleware(['throttle:participate_in_survey']);
