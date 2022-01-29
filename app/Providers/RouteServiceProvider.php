@@ -61,7 +61,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('participate_in_survey', function (Request $request) {
-            return Limit::perDay(10)->by(optional($request->user())->id ?: $request->ip());
+            return Limit::perDay(3)->by(optional($request->user())->id ?: $request->ip());
         });
     }
 }
