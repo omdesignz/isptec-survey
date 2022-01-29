@@ -277,7 +277,7 @@
 
       <hr>
       <div class="flex justify-end mt-4">
-        <button v-if="form.class && form.no_delays.length && form.few_delays.length && form.lots_of_delays.length && form.no_absences.length && form.few_absences.length && form.lots_of_absences.length" :disabled="form.processing" type="button" class="flex items-end px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-gray-900 bg-yellow-400 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400" @click="submit">
+        <button v-if="form.class && form.no_delays.length > 0 && form.few_delays.length > 0 && form.lots_of_delays.length > 0 && form.no_absences.length > 0 && form.few_absences.length > 0 && form.lots_of_absences.length > 0" :disabled="form.processing" type="button" class="flex items-end px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-gray-900 bg-yellow-400 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400" @click="submit">
             Submeter Respostas
         </button>
         </div>
