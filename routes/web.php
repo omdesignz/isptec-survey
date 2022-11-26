@@ -134,6 +134,8 @@ Route::get('/participar', function () {
     ]);
 });
 
+// A simple comment
+
 Route::post('/surveys', function () {
     request()->validate([
         'class' => ['required', 'exists:classes,id'],
